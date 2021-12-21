@@ -24,8 +24,9 @@ const database = {
     },
   ],
 };
-app.use(cors());
 
+app.use(cors());
+// app.use(console.log);
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -44,11 +45,12 @@ app.get("/profile/:id", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  // console.log(req);
   if (
     req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password
   ) {
-    res.json("success").status(200);
+    res.json(database.users[0]).status(200);
   } else {
     res.status(400).json("Error logging in");
   }
@@ -65,15 +67,15 @@ app.post("/register", (req, res) => {
     id: 125,
     name: name,
     email: email,
-    password: password,
+    // password: password,
     entries: 0,
     joined: new Date(),
   });
   res.json(database.users[database.users.length - 1]);
 });
 
-app.put("/image", (req, res) => {
-  const { id } = req.body;
+app.put("/image/:id", (req, res) => {
+  const { id } = req.params;
   let found = false;
   database.users.forEach((user) => {
     if (user.id === Number(id)) {
